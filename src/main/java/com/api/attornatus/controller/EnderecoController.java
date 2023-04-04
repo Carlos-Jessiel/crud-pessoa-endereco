@@ -1,8 +1,10 @@
 package com.api.attornatus.controller;
 
 import com.api.attornatus.dto.endereco.DadosCadastroEnderecoDto;
+import com.api.attornatus.dto.endereco.DadosDefinirEnderecoPrincipalDto;
 import com.api.attornatus.dto.endereco.DadosListagemEnderecoDto;
 import com.api.attornatus.service.endereco.ServiceCadastrarNovoEndereco;
+import com.api.attornatus.service.endereco.ServiceDefinirEnderecoPrincipal;
 import com.api.attornatus.service.endereco.ServiceListarEnderecos;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
@@ -19,9 +21,14 @@ public class EnderecoController {
 
     private final ServiceListarEnderecos serviceListarEnderecos;
 
-    public EnderecoController(ServiceCadastrarNovoEndereco serviceCadastrarNovoEndereco, ServiceListarEnderecos serviceListarEnderecos) {
+    private final ServiceDefinirEnderecoPrincipal serviceDefinirEnderecoPrincipal;
+
+    public EnderecoController(ServiceCadastrarNovoEndereco serviceCadastrarNovoEndereco,
+                              ServiceListarEnderecos serviceListarEnderecos,
+                              ServiceDefinirEnderecoPrincipal serviceDefinirEnderecoPrincipal) {
         this.serviceCadastrarNovoEndereco = serviceCadastrarNovoEndereco;
         this.serviceListarEnderecos = serviceListarEnderecos;
+        this.serviceDefinirEnderecoPrincipal = serviceDefinirEnderecoPrincipal;
     }
 
     @PostMapping("{id}")
@@ -34,4 +41,8 @@ public class EnderecoController {
         return serviceListarEnderecos.execute(id, paginacao);
     }
 
+    @PutMapping
+    public ResponseEntity definirEnderecoPrincipal(@RequestBody @Valid DadosDefinirEnderecoPrincipalDto dados){
+        return serviceDefinirEnderecoPrincipal.execute(dados);
+    }
 }
