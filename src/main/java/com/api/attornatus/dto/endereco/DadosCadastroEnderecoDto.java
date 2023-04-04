@@ -19,7 +19,7 @@ public record DadosCadastroEnderecoDto(
         var modelEndereco = new Endereco();
         modelEndereco.setLogradouro(dados.logradouro);
         modelEndereco.setPessoa(modelPessoa);
-        modelEndereco.setPrimario(true);
+        modelEndereco.setPrincipal(true);
         modelEndereco.setCep(dados.cep);
         modelEndereco.setNumero(dados.numero);
         modelEndereco.setCidade(dados.cidade);

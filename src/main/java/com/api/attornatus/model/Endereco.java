@@ -20,7 +20,7 @@ public class Endereco {
     @ManyToOne
     @JoinColumn(name = "pessoa_id")
     private Pessoa pessoa;
-    private Boolean primario;
+    private Boolean principal;
     @Column(length = 100)
     private String logradouro;
     @Column(length = 8)

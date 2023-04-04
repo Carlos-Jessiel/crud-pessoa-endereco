@@ -12,7 +12,7 @@ public record DadosRetornoAtualizacaoPessoaDto(
         Long id,
         String nome,
         LocalDate dataDeNascimento,
-        DadosRetornoConsultarEnderecoDto enderecoDto
+        DadosRetornoConsultarEnderecoDto endereco
 
 ) {
 

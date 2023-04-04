@@ -9,7 +9,7 @@ public class FiltroEndereco {
 
     public static Endereco filtrarEnderecoPrimario(List<Endereco> modelEndereco) {
         for (Endereco model : modelEndereco) {
-            if (model.getPrimario().booleanValue()) {
+            if (model.getPrincipal().booleanValue()) {
                 return model;
             }
         }
@@ -18,8 +18,8 @@ public class FiltroEndereco {
 
     public static Endereco filtrarEndereco(List<Endereco> modelEndereco) {
         for (Endereco model : modelEndereco) {
-            if (model.getPrimario().booleanValue()) {
-                model.setPrimario(false);
+            if (model.getPrincipal().booleanValue()) {
+                model.setPrincipal(false);
                 return model;
             }
         }

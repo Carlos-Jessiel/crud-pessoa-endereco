@@ -5,7 +5,7 @@ import com.api.attornatus.model.Endereco;
 public record DadosRetornoConsultarEnderecoDto(
 
         Long id,
-        Boolean primario,
+        Boolean principal,
         String logradouro,
         String cep,
         String numero,
@@ -13,7 +13,7 @@ public record DadosRetornoConsultarEnderecoDto(
 ){
     public DadosRetornoConsultarEnderecoDto(Endereco modelEndereco){
         this(modelEndereco.getId(),
-                modelEndereco.getPrimario(),
+                modelEndereco.getPrincipal(),
                 modelEndereco.getLogradouro(),
                 modelEndereco.getCep(),
                 modelEndereco.getNumero(),
