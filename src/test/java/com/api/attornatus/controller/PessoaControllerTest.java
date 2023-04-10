@@ -1,10 +1,14 @@
 package com.api.attornatus.controller;
 
+import com.api.attornatus.dto.endereco.DadosAtualizacaoEnderecoDto;
 import com.api.attornatus.dto.endereco.DadosCadastroEnderecoDto;
+import com.api.attornatus.dto.pessoa.DadosAtualizacaoPessoaDto;
 import com.api.attornatus.dto.pessoa.DadosCadastroPessoaDto;
+import com.api.attornatus.dto.pessoa.DadosRetornoAtualizacaoPessoaDto;
 import com.api.attornatus.dto.pessoa.DadosRetornoCadastroPessoaDto;
 import com.api.attornatus.model.Endereco;
 import com.api.attornatus.model.Pessoa;
+import com.api.attornatus.service.pessoa.ServiceAtualizarDadosPessoa;
 import com.api.attornatus.service.pessoa.ServiceCadastrarPessoa;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -27,6 +31,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -42,8 +47,17 @@ class PessoaControllerTest {
     @Autowired
     private JacksonTester<DadosRetornoCadastroPessoaDto> dadosRetornoCadastroPessoaDtoJson;
 
+    @Autowired
+    private JacksonTester<DadosAtualizacaoPessoaDto> dadosAtualizacaoPessoaDtoJson;
+
+    @Autowired
+    private JacksonTester<DadosRetornoAtualizacaoPessoaDto> dadosRetornoAtualizacaoPessoaDtoJson;
+
     @MockBean
     private ServiceCadastrarPessoa serviceCadastrarPessoa;
+
+    @MockBean
+    private ServiceAtualizarDadosPessoa serviceAtualizarDadosPessoa;
 
     @Test
     @DisplayName("Deveria devolver codigo 400 quando informações estao inválidas")
@@ -98,6 +112,48 @@ class PessoaControllerTest {
                 .getResponse();
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
+    @Test
+    @DisplayName("Deveria devolver codigo 200 alterando os dados do usuario")
+    void atualizarDadosPessoa_cenario2() throws Exception {
+        var modelPessoa = cadastrarPessoa();
+
+        var dadosAtualizacao = new DadosAtualizacaoPessoaDto(1L, "Nome", null,
+                new DadosAtualizacaoEnderecoDto(
+                        "Logradouro",
+                        "87654321",
+                        null,
+                        null));
+
+        var modelAtualizada = DadosAtualizacaoPessoaDto.atualizarModel(modelPessoa, dadosAtualizacao);
+        var modelEnderecoAtualizada = DadosAtualizacaoEnderecoDto.atualizarModel(dadosAtualizacao.endereco(), modelPessoa.getEndereco().get(0));
+
+        var dadosRetorno = new DadosRetornoAtualizacaoPessoaDto(modelAtualizada, modelEnderecoAtualizada);
+
+        when(serviceAtualizarDadosPessoa.execute(any()))
+                .thenReturn(ResponseEntity.status(HttpStatus.OK)
+                        .body(dadosRetorno));
+
+        var response = mvc.perform(put("/pessoa")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(dadosAtualizacaoPessoaDtoJson
+                                .write(new DadosAtualizacaoPessoaDto(
+                                        dadosAtualizacao.id(),
+                                        dadosAtualizacao.nome(),
+                                        dadosAtualizacao.dataDeNascimento(),
+                                        dadosAtualizacao.endereco()))
+                                .getJson()))
+                .andReturn()
+                .getResponse();
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
+
+        var jsonEsperado = dadosRetornoAtualizacaoPessoaDtoJson
+                .write(dadosRetorno)
+                .getJson();
+
+        assertThat(response.getContentAsString()).isEqualTo(jsonEsperado);
     }
 
     private Pessoa cadastrarPessoa(){
