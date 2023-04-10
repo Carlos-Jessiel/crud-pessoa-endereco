@@ -20,7 +20,7 @@ public class ConfigSwagger {
                         .description("API REST de cadastro de pessoas e endereços.")
                         .contact(new Contact()
                                 .name("Carlos Jessiel")
-                                .url("https://www.linkedin.com/in/carlos-jessiel-nu%C3%B1ez-soares/")
+                                .url("https://www.linkedin.com/in/carlos-jessiel-nunez-soares/")
                                 .email("c.jessiel_nunez@hotmail.com"))
                         .license(new License()
                                 .name("Apache License Version 2.0")
