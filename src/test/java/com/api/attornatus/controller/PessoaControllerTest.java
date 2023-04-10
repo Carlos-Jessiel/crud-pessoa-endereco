@@ -90,6 +90,16 @@ class PessoaControllerTest {
         assertThat(response.getContentAsString()).isEqualTo(jsonEsperado);
     }
 
+    @Test
+    @DisplayName("Deveria devolver codigo 400 quando informações estao inválidas")
+    void atualizarDadosPessoa_cenario1() throws Exception {
+        var response = mvc.perform(post("/pessoa"))
+                .andReturn()
+                .getResponse();
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
+
     private Pessoa cadastrarPessoa(){
         List<Endereco> listEndereco = new ArrayList<>();
         var modelPessoa = DadosCadastroPessoaDto.transformModel(dadosCadastroPessoa());
