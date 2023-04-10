@@ -27,4 +27,14 @@ class EnderecoControllerTest {
 
         assertThat(response.getStatus()).isEqualTo(HttpStatus.METHOD_NOT_ALLOWED.value());
     }
+
+    @Test
+    @DisplayName("Deveria devolver codigo 400 quando dados inválidos")
+    void cadastrarNovoEndereco_cenario2() throws Exception {
+        var response = mvc.perform(post("/endereco/1"))
+                .andReturn()
+                .getResponse();
+
+        assertThat(response.getStatus()).isEqualTo(HttpStatus.BAD_REQUEST.value());
+    }
 }
